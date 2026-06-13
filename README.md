@@ -1,3 +1,9 @@
+# simulators
+
+a collection of some cpu simulators
+
+pay me in github stars ;-)
+
 ## (yet another) 6502 simulator
 
 I'm working on this many decades now ;-)
