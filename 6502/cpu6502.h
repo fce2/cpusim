@@ -57,7 +57,7 @@ extern "C" {
 		u16 PC;			/* Program counter (16-bit, 64K address space) */
 		u8* ram;		/* 64K flat RAM */
 		BOOL halted;	/* 'true' after KIL/JAM (NMOS illegal), or STP/WAI (WDC65C02) */
-		void* ctx;		/* user context for I/O callbacks (e.g. system struct) */
+		void* ctx;		/* user context for I/O callbacks */
 #ifdef MEM_IO
 		cpu6502_read_cb mem_read;
 		cpu6502_write_cb mem_write;
@@ -68,9 +68,11 @@ extern "C" {
 	void	cpu6502_reset(_CPUP);			/* reset vectors: PC=$FFFC, SP=$FD, I=1 */
 	void	cpu6502_irq(_CPUC BOOL force);	/* maskable interrupt (ignored if I=1, unless force) */
 	void	cpu6502_nmi(_CPUP);				/* non-maskable interrupt (always taken) */
+	BOOL	cpu6502_is_halted(_CPUP);		/* e.g. after KIL */
 	CYCLES	cpu6502_step(_CPUP);			/* execute one instruction, return cycle count */
-	u32		cpu6502_run(_CPUC int budget);	/* run up to budget instructions (0=unlimited) */
-	BOOL	cpu6502_is_halted(_CPUP);
+#ifdef COUNT_CYCLES
+	u32		cpu6502_run(_CPUC u32 budget);	/* run up to budget instructions */
+#endif
 
 #ifdef DEBUG
 	void cpu6502_dump(_CCPUP);

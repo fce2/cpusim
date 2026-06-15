@@ -11,19 +11,19 @@ PETSCII = $(RETROLIB)/cbm_petscii.c
 
 all: main000.prg main001.exe main001.prg main002.exe main003.exe
 
-main001.exe: main001.cpp main.h cpu6502.c
+main001.exe: main001.cpp main.h cpu6502.h cpu6502.c
 	$(CXX) $(CFLAGS) -DSINGLE_INST -o $@ main001.cpp cpu6502.c
 
-main002.exe: main002.cpp main.h cpu6502.c
+main002.exe: main002.cpp main.h cpu6502.h cpu6502.c
 	$(CXX) $(CFLAGS) -o $@ main002.cpp cpu6502.c
 
-main003.exe: main003.cpp main.h cpu6502.c $(PETSCII)
+main003.exe: main003.cpp main.h cpu6502.h cpu6502.c $(PETSCII)
 	$(CXX) $(CFLAGS) -DMEM_IO -o $@ main003.cpp cpu6502.c $(PETSCII)
 
-main000.prg: main000.cpp main.h cpu6502.c
+main000.prg: main000.cpp main.h cpu6502.h cpu6502.c
 	$(OSCAR64) -Os -DSINGLE_INST -DRICOH2A03 -i=$(ROOT) -o=$@ main000.cpp cpu6502.c
 
-main001.prg: main001.cpp main.h cpu6502.c
+main001.prg: main001.cpp main.h cpu6502.h cpu6502.c
 	$(OSCAR64) -O2 -DDEBUG -DSINGLE_INST -DRICOH2A03 -i=$(ROOT) -o=$@ main001.cpp cpu6502.c
 
 clean:

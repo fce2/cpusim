@@ -11,7 +11,9 @@
 #define INIT_SP		0xFD	/* SP after reset */
 #define PAGE_MASK	0xFF00	/* page-crossing cycle detection */
 #define ADDR_MASK	0xFFFF	/* 16-bit wrap, prevents UB on 32-bit */
-#define LXAA		0xEE	/* LXA,XAA are unstable, chip-dependent constant */
+#ifndef LXAA
+	#define LXAA	0x00	/* LXA,XAA are unstable, chip-dependent constant, 0x00 from visual6502 netlist */
+#endif
 
 /* nz_table[v] → N|Z flags. NO_NZ_TABLE: branch-based SETNZ (saves 256B). */
 #ifndef NO_NZ_TABLE
@@ -200,9 +202,7 @@ CPU6502* cpu6502_get(void) {
 #endif
 	return c;
 }
-const CPU6502* cpu6502_ptr(void) {
-	return g_cpu;
-}
+const CPU6502* cpu6502_ptr(void) { return g_cpu; }
 #endif
 
 #if defined(MEM_IO) && !defined(NO_IO_MAP)
@@ -214,10 +214,10 @@ void cpu6502_io_range(_CPUC uint8_t lo, uint8_t hi) {
 }
 #endif
 
-/* Reset: PC from $FFFC/D, A=X=Y=0, P=0x20, SP=$FD. */
+/* Reset: PC from $FFFC/D, A=X=Y=0, P=0x24, SP=$FD. */
 void cpu6502_reset(_CPUP) {
 	PC = RD(RST_ADDR) | ((uint16_t)RD(RST_ADDR + 1) << 8);
-	A = X = Y = 0; P = P6502_U; SP = INIT_SP; halted = 0;
+	A = X = Y = 0; P = P6502_U | P6502_I; SP = INIT_SP; halted = 0;
 }
 
 /* Push PC+P to stack, jump to vector. CLR_D: NMOS no-op, CMOS clears decimal. */
@@ -237,6 +237,8 @@ void cpu6502_irq(_CPUC BOOL force) {
 void cpu6502_nmi(_CPUP) {
 	int_push_jump(_CPUCA NMI_ADDR);
 }
+
+BOOL cpu6502_is_halted(_CPUP) { return halted; }
 
 /* F/F16 advance PC before case body so BRK/JSR read current PC. */
 CYCLES cpu6502_step(_CPUP)
@@ -592,6 +594,16 @@ CYCLES cpu6502_step(_CPUP)
 	return STEPRET;
 }
 
+#ifdef COUNT_CYCLES
+u32 cpu6502_run(_CPUC u32 budget) {
+	u32 cycles = 0;
+	while (cycles < budget) {
+		cycles += cpu6502_step(_CPUPA);
+	}
+	return cycles;
+}
+#endif
+
 #ifdef DEBUG
 #ifdef __OSCAR64C__
 void cpu6502_dump(_CCPUP) { printf("%04X: A%02X X%02X Y%02X P%02X:%c%c%c%c%c%c%c%c SP:%02X\n", PC, A, X, Y, P, P & P6502_N ? 'N' : 'n', P & P6502_V ? 'V' : 'v', P & P6502_U ? 'U' : 'u', P & P6502_B ? 'B' : 'b', P & P6502_D ? 'D' : 'd', P & P6502_I ? 'I' : 'i', P & P6502_Z ? 'Z' : 'z', P & P6502_C ? 'C' : 'c', SP); }
@@ -599,5 +611,3 @@ void cpu6502_dump(_CCPUP) { printf("%04X: A%02X X%02X Y%02X P%02X:%c%c%c%c%c%c%c
 void cpu6502_dump(_CCPUP) { printf("PC=%04X A=%02X X=%02X Y=%02X P=%02X:%c%c%c%c%c%c%c%c SP=%02X\n", PC, A, X, Y, P, P & P6502_N ? 'N' : 'n', P & P6502_V ? 'V' : 'v', P & P6502_U ? 'U' : 'u', P & P6502_B ? 'B' : 'b', P & P6502_D ? 'D' : 'd', P & P6502_I ? 'I' : 'i', P & P6502_Z ? 'Z' : 'z', P & P6502_C ? 'C' : 'c', SP); }
 #endif
 #endif
-
-BOOL cpu6502_is_halted(_CPUP) { return halted; }

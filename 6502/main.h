@@ -13,5 +13,5 @@
 		fread(&ram[addr], 1, (size_t)n, f);
 		fclose(f);
 	}
-	#define LOADROMS load(ram, "kernal_e000.rom", 0xE000); load(ram, "basic_a000.rom",  0xA000);
+	#define LOADROMS load(ram, "basic_a000.rom",  0xA000); load(ram, "kernal_e000.rom", 0xE000);
 #endif

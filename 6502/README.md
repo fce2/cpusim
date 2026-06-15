@@ -4,18 +4,18 @@ I'm working on this many decades now ;-)
 Time to release before i die...
 
 **Portable:**
-	in C89 to be as portable as possible
+	in C89 to be as portable as possible.
 
 **Selfcontained:**
-	no dependencies
-	no installations or configurations needed
-	and no annoying licenses
+	no dependencies.
+	no installations or configurations needed.
+	and no annoying licenses.
 
 - Full NMOS and CMOS support (5 variants)
 - All bugs preserved (e.g. jmpbug)
 - Cycle exact (if needed)
 
-Optimized for various usages with many defines ("not too good" documented yet)
+Optimized for various usages with many defines ("not too good" documented yet).
 
 | Define | Effect |
 |-------|--------|
@@ -49,19 +49,41 @@ I couldn't test all of them because of missing dependencies or needed installati
 - `6502/cpu6502.c`
 - `sim.h`
 
-### testing
-
-#### some little tests
-
-- `main.h` — some very little test helpers
-- `main000.cpp` — 6502-on-6502
-  probably the smallest 6502 simulator currently simulating itself: main000.prg is 5591 bytes (without printf) !
-  and maybe the only time in computing history a NULLPTR is a valid ptr: `#define ram ((u8*)0)` !
-- `main001.cpp` — added some "useful" output to main000.cpp, even with printf still very small
-  starts booting (on) a c64 ;-)
 ```
-	PC=FCE2 A=00 X=00 Y=00 P=20:nvUbdizc SP=FD
-	PC=FCE4 A=00 X=FF Y=00 P=A0:NvUbdizc SP=FD
+	#include "cpu6502.h"
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
+
+	static void load(u8 *ram, const char* path, u16 addr) {
+		FILE* f = fopen(path, "rb");
+		if (!f) { fprintf(stderr, "Can't open %s\n", path); exit(1); }
+		fseek(f, 0, SEEK_END); long n = ftell(f); fseek(f, 0, SEEK_SET);
+		fread(&ram[addr], 1, (size_t)n, f);
+		fclose(f);
+	}
+
+	int main() {
+		static u8 ram[65536] = {};
+		load(ram, "basic_a000.rom",  0xA000);
+		load(ram, "kernal_e000.rom", 0xE000);
+		CPU6502 cpu;
+		cpu6502_init(&cpu, ram, NULL, NULL);
+		cpu6502_reset(&cpu);
+		if (cpu.PC != 0xFCE2) { printf("FAIL: wrong reset vector\n"); return 1; }
+		int cycles = 0, i = 0;
+		for (; i < 20; i++) {
+			cpu6502_dump(&cpu);
+			cycles += cpu6502_step(&cpu);
+		}
+		printf("%d steps (%d cycles): PC=$%04X A=$%02X X=$%02X Y=$%02X SP=$%02X\n", i, cycles, cpu.PC, cpu.A, cpu.X, cpu.Y, cpu.SP);
+		return 0;
+	}
+```
+gives
+```
+	PC=FCE2 A=00 X=00 Y=00 P=24:nvUbdIzc SP=FD
+	PC=FCE4 A=00 X=FF Y=00 P=A4:NvUbdIzc SP=FD
 	PC=FCE5 A=00 X=FF Y=00 P=A4:NvUbdIzc SP=FD
 	PC=FCE6 A=00 X=FF Y=00 P=A4:NvUbdIzc SP=FF
 	PC=FCE7 A=00 X=FF Y=00 P=A4:NvUbdIzc SP=FF
@@ -80,8 +102,24 @@ I couldn't test all of them because of missing dependencies or needed installati
 	PC=FDAE A=7F X=05 Y=00 P=25:nvUbdIzC SP=FD
 	PC=FDB0 A=08 X=05 Y=00 P=25:nvUbdIzC SP=FD
 	PC=FDB3 A=08 X=05 Y=00 P=25:nvUbdIzC SP=FD
+	20 steps (70 cycles): PC=$FDB6 A=$08 X=$05 Y=$00 SP=$FD
 ```
+
+### testing
+
+#### some little tests
+
+- `main.h` — some very little test helpers
+
+- `main000.cpp` — 6502-on-6502
+  probably the smallest 6502 simulator currently simulating itself: main000.prg is **5591 bytes** (without printf) !
+  and maybe the only time in computing history a NULLPTR is a valid ptr: `#define ram ((u8*)0)` !
+
+- `main001.cpp` — added some "useful" output to main000.cpp, even with printf still very small
+  starts booting (on) a c64 ;-)
+
 - `main002.cpp` — a bit more functional, not a single global instance anymore
+
 - `main003.cpp` — added basic irqs, let the c64 boot to READY.
 ```
 	2706955 cycles, 159 IRQs: PC=$E5CD A=$00
