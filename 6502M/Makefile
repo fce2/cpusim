@@ -10,3 +10,7 @@ main001.exe: main001.cpp cpu6502M.h
 
 clean:
 	rm -f main001.exe
+
+
+test: main001.exe
+	.\main001.exe

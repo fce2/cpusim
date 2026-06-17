@@ -12,3 +12,6 @@ main001.exe: main001.cpp cpuZ80.c
 
 clean:
 	rm -f main001.exe
+
+test: main001.exe
+	.\main001.exe

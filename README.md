@@ -142,27 +142,26 @@ gives
 #### the big tests
 
 Thanks to all cpu testers sharing results.
-Tom Harte did a great job: 10000 tests for each opcode helped a lot !
-Klaus Dormann helped also a lot to get things right !
+Tom Harte (https://github.com/SingleStepTests/65x02) did a great job: 10000 tests for each opcode helped a lot !
+Klaus Dormann (https://github.com/Klaus2m5/6502_65C02_functional_tests) helped also a lot to get things right !
 
 
 ## (yet another) 6502 simulator (V2)
 
-This time in small.
-Maybe the smallest ;-)
-In C++.
-And not really nice readable...
-But small, less than 100 "lines", less than 5kB.
+This time in small, maybe the smallest ;-)
+In C++, and not really nice readable...
 Not optimized for speed, only for size.
+Not even cycle counting (use the "real" cpu6502.c/h for that).
+But small, less than 100 "lines", less than 5kB.
+More the category "why ?"...
 
 - Only NMOS 6502
-- No illeagl opcodes
+- No illegal opcodes
 
 ### source files
 
 #### the simulator itself
 
-- `6502M/cpu6502M.c`
 - `6502M/cpu6502M.h`
 
 ### testing
@@ -196,6 +195,43 @@ Not optimized for speed, only for size.
 ```
 
 
+## (yet another) 65816 simulator
+
+In C89 to be as portable as possible.
+No dependencies, no installations or configurations needed and no annoying licenses.
+
+| Define | Effect |
+|-------|--------|
+| `DEBUG` | enable cpu65816_dump() and unhandled opcode warnings |
+| `SINGLE_INST` | bare static globals, no cpu pointer param |
+| `MEM_IO` | memory r/w callbacks for I/O-mapped hardware |
+| `COUNT_CYCLES` | step() returns cycle count, else void; enables cpu65816_run() |
+| `NO_IO_MAP` | all MEM_IO via callback, no io_map bitmap (saves 64KB!) |
+| `RICOH5A22` | SNES Ricoh 5A22 (WIP) |
+
+Key differences from the 6502:
+
+| Feature | 6502 | 65816 |
+|---------|------|-------|
+| Address space | 64 KB | 16 MB (24-bit) |
+| Registers | A, X, Y (8-bit) | A(16), X, Y(8/16), D, PBR, DBR |
+| Stack pointer | 8-bit ($0100-$01FF) | 16-bit (native), 8-bit (emulation) |
+| Mode | — | Emulation (E=1) ↔ Native (E=0) |
+| M/X flags | — | Select 8/16-bit accumulator and index width |
+| Vectors | 3 (NMI/RST/IRQ) | 9 addresses across 2 modes (emu: COP/BRK+IRQ/NMI/RST, native: COP/BRK/ABT/NMI/IRQ) |
+| Block moves | — | MVN/MVP (up to 64KB per instruction) |
+| Direct page | Zero page ($0000) | Relocatable via D register |
+| BCD | 8-bit only | 8-bit and 16-bit |
+
+### source files
+
+#### the simulator itself
+
+- `65816/cpu65816.h`
+- `65816/cpu65816.c`
+- `sim.h`
+
+
 ## (yet another) Z80 simulator
 
 **Same approach:**
@@ -225,7 +261,7 @@ Not optimized for speed, only for size.
 
 #### tests
 
-- `z80/main001.cpp` — loads a tiny program, runs 8 steps, prints registers
+- `main001.cpp` — loads a tiny program, runs 8 steps, prints registers
   "hello world" for Z80: load A and B, ADD, store to memory, HALT
 
 I could use help on testing.

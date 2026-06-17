@@ -1,3 +1,8 @@
+#ifdef ENGINE_T
+#include "mainT.h"
+#elif defined(ENGINE_CUDA)
+#include "mainT.h"
+#else
 #include "cpu6502.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,4 +19,5 @@
 		fclose(f);
 	}
 	#define LOADROMS load(ram, "basic_a000.rom",  0xA000); load(ram, "kernal_e000.rom", 0xE000);
+#endif
 #endif

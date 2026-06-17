@@ -12,7 +12,7 @@
 #define PAGE_MASK	0xFF00	/* page-crossing cycle detection */
 #define ADDR_MASK	0xFFFF	/* 16-bit wrap, prevents UB on 32-bit */
 #ifndef LXAA
-	#define LXAA	0x00	/* LXA,XAA are unstable, chip-dependent constant, 0x00 from visual6502 netlist */
+	#define LXAA	0xEE	/* LXA,XAA are unstable, chip-dependent constant, 0xEE for Tom Hartes zip */
 #endif
 
 /* nz_table[v] → N|Z flags. NO_NZ_TABLE: branch-based SETNZ (saves 256B). */

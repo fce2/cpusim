@@ -135,5 +135,5 @@ gives
 #### the big tests
 
 Thanks to all cpu testers sharing results.
-Tom Harte did a great job: 10000 tests for each opcode helped a lot !
-Klaus Dormann helped also a lot to get things right !
+Tom Harte (https://github.com/SingleStepTests/65x02) did a great job: 10000 tests for each opcode helped a lot !
+Klaus Dormann (https://github.com/Klaus2m5/6502_65C02_functional_tests) helped also a lot to get things right !

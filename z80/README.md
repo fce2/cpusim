@@ -27,7 +27,7 @@
 
 #### tests
 
-- `z80/main001.cpp` — loads a tiny program, runs 8 steps, prints registers
+- `main001.cpp` — loads a tiny program, runs 8 steps, prints registers
   "hello world" for Z80: load A and B, ADD, store to memory, HALT
 
 I could use help on testing.

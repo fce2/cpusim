@@ -1,20 +1,19 @@
 ## (yet another) 6502 simulator (V2)
 
-This time in small.
-Maybe the smallest ;-)
-In C++.
-And not really nice readable...
-But small, less than 100 "lines", less than 5kB.
+This time in small, maybe the smallest ;-)
+In C++, and not really nice readable...
 Not optimized for speed, only for size.
+Not even cycle counting (use the "real" cpu6502.c/h for that).
+But small, less than 100 "lines", less than 5kB.
+More the category "why ?"...
 
 - Only NMOS 6502
-- No illeagl opcodes
+- No illegal opcodes
 
 ### source files
 
 #### the simulator itself
 
-- `6502M/cpu6502M.c`
 - `6502M/cpu6502M.h`
 
 ### testing

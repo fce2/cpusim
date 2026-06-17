@@ -30,3 +30,8 @@ clean:
 	rm -f main000.exe main001.exe main002.exe main003.exe
 	rm -f main000.prg main000.asm main000.int main000.lbl main000.map
 	rm -f main001.prg main001.asm main001.int main001.lbl main001.map
+
+test: main001.exe main002.exe main003.exe
+	.\main001.exe
+	.\main002.exe
+	.\main003.exe
