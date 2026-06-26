@@ -1,6 +1,8 @@
 ## (yet another) 6502 simulator (V2)
 
-This time in small, maybe the smallest ;-)
+"M" for Mini.
+
+This time in small, maybe the smallest (**4916 bytes ;-)
 In C++, and not really nice readable...
 Not optimized for speed, only for size.
 Not even cycle counting (use the "real" cpu6502.c/h for that).
@@ -45,3 +47,5 @@ More the category "why ?"...
 	PC=FDB0 A=08 X=05 Y=00 P=25 SP=FD
 	PC=FDB3 A=08 X=05 Y=00 P=25 SP=FD
 ```
+
+---

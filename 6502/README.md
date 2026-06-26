@@ -117,10 +117,11 @@ gives
 
 - `main001.cpp` — added some "useful" output to main000.cpp, even with printf still very small
   starts booting (on) a c64 ;-)
+  ![booting...](main001.png)
 
 - `main002.cpp` — a bit more functional, not a single global instance anymore
 
-- `main003.cpp` — added basic irqs, let the c64 boot to READY.
+- `main003.cpp` — added basic irqs, let the c64 "boot" to READY.
 ```
 	2706955 cycles, 159 IRQs: PC=$E5CD A=$00
 	Jiffy: $04 $00 $00
@@ -132,8 +133,12 @@ gives
 	READY.
 ```
 
+51216 bytes free becuse no no proper ram management.
+
 #### the big tests
 
 Thanks to all cpu testers sharing results.
 Tom Harte (https://github.com/SingleStepTests/65x02) did a great job: 10000 tests for each opcode helped a lot !
 Klaus Dormann (https://github.com/Klaus2m5/6502_65C02_functional_tests) helped also a lot to get things right !
+
+---

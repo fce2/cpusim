@@ -18,9 +18,14 @@ typedef uint32_t u32;
 	typedef uint64_t u64;
 #endif
 
-#ifndef FALSE
+#ifndef _SIM_BOOL_DEFINED
+#define _SIM_BOOL_DEFINED
 	typedef u8 BOOL;
+#endif
+#ifndef FALSE
 	enum { FALSE, TRUE };
+#elif !defined(TRUE)
+	#define TRUE 1
 #endif
 
 #ifdef CPU_TYPE

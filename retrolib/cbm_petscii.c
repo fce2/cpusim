@@ -11,8 +11,8 @@ void cbm_ascii_to_petscii(const char *s, uint8_t *out, int length)
 
 int cbm_petscii_to_ascii(const uint8_t *data, int len, char *out, int out_cap)
 {
-	int j = 0;
-	for (int i = 0; i < len && j < out_cap - 1; i++) {
+	int i, j = 0;
+	for (i = 0; i < len && j < out_cap - 1; i++) {
 		uint8_t b = data[i];
 		if (b == 0x00) break;
 		if (b == CBM_PAD_CHAR) out[j++] = ' ';

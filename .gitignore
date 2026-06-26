@@ -53,3 +53,9 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Large binaries (GitHub 100 MB per-file limit) and copyrighted ROM
+# images. Do NOT ship in the tree -- host binaries via Releases/LFS,
+# and have users supply their own ROMs.
+65x02-perfect.zip
+*.rom

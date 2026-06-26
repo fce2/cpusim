@@ -16,7 +16,7 @@ int main() {						// start
 	LOADROMS						// load roms
 	cpu6502_init(ram, NULL, NULL);	// init cpu
 	cpu6502_reset();				// reset cpu
-	for (int i = 0; i < 20; i++)
-		cpu6502_step();				// step cpu
+	for (int i = 0; i < 20; i++)	// 20 times:
+		cpu6502_step();				//   step cpu
 	return 0;						// end
 }

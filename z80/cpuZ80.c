@@ -792,7 +792,7 @@ u32 cpuZ80_run(_CPUC u32 budget) {
 
 #ifdef DEBUG
 void cpuZ80_dump(_CCPUP) {
-	printf("AF=%04X BC=%04X DE=%04X HL=%04X IX=%04X IY=%04X SP=%04X PC=%04X\n", AF, BC, DE, HL, IX, IY, SP, PC);
+	printf("AF =%04X BC =%04X DE =%04X HL =%04X IX=%04X IY=%04X SP=%04X PC=%04X\n", AF, BC, DE, HL, IX, IY, SP, PC);
 	printf("AF'=%04X BC'=%04X DE'=%04X HL'=%04X I=%02X R=%02X IM=%d IFF1=%d IFF2=%d\n", AF_, BC_, DE_, HL_, I, R, IM, IFF1, IFF2);
 }
 #endif

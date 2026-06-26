@@ -23,7 +23,6 @@ int main() {
 	cpuZ80_init(ram, NULL, NULL, NULL, NULL);
 	cpuZ80_reset();
 	for (int i = 0; i < 8; i++) {
-		printf("[%d] ", i);
 		cpuZ80_dump();
 		cpuZ80_step();
 	}
